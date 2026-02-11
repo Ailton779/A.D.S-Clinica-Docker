@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Sistema Clínica – Camadas</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<!-- LOGIN -->
+<div id="login" class="card">
+  <h2>Login</h2>
+  <input id="loginUser" placeholder="Usuário" />
+  <input id="loginPass" type="password" placeholder="Senha" />
+  <button onclick="handleLogin()">Entrar</button>
+  <p id="loginMsg" class="muted" style="color:red"></p>
+  <p class="muted">Usuários padrão: admin/123 — dr1/123 — dr2/123 — dr3/123 — sec/123</p>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <div class="card topbar">
+    <div>
+      <strong id="userWelcome"></strong>
+      <div id="userRole" class="muted"></div>
+    </div>
+    <button class="secondary" onclick="logout()">Sair</button>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="adminArea" class="card hidden">
+    <h3>Admin – Gerenciar Usuários</h3>
+    <div class="row">
+      <div class="col">
+        <label>Tipo</label>
+        <select id="newTipo">
+          <option value="admin">Admin</option>
+          <option value="doutor">Doutor</option>
+          <option value="secretaria">Secretária</option>
+        </select>
+        <input id="newUser" placeholder="Usuário" />
+        <input id="newPass" placeholder="Senha" />
+        <button onclick="cadastrarUsuario()">Salvar usuário</button>
+        <p id="msgUser" class="muted"></p>
+      </div>
+      <div class="col">
+        <h4>Usuários cadastrados</h4>
+        <table id="tUsuarios"><thead><tr><th>Usuário</th><th>Tipo</th><th>Ações</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECRETARIA -->
+  <div id="secretariaArea" class="card hidden">
+    <h3>Secretária – Pacientes / Agenda / Financeiro</h3>
+    <div class="row">
+
+      <!-- Cadastro paciente + agendamento -->
+      <div class="col">
+        <h4>Cadastro de Paciente</h4>
+        <input id="pNome" placeholder="Nome" />
+        <input id="pCPF" placeholder="CPF" />
+        <input id="pTelefone" placeholder="Telefone" />
+        <input id="pNascimento" type="date" />
+        <input id="pEndereco" placeholder="Endereço" />
+        <input id="pAlergias" placeholder="Alergias" />
+        <textarea id="pHistorico" placeholder="Histórico clínico e observações"></textarea>
+        <button onclick="salvarPaciente()">Salvar</button>
+        <button class="secondary" onclick="limparFormPaciente()">Limpar</button>
+        <p id="msgPaciente" class="muted"></p>
+
+        <hr />
+
+        <h4>Agendar Consulta</h4>
+        <label>Paciente</label>
+        <select id="selPaciente"></select>
+
+        <label>Doutor</label>
+        <select id="selDoutor"></select>
+
+        <label>Data</label>
+        <input id="cData" type="date" />
+
+        <label>Hora</label>
+        <input id="cHora" type="time" />
+
+        <label>Valor (R$)</label>
+        <input id="cValor" type="number" />
+
+        <label>Observações</label>
+        <textarea id="cObs"></textarea>
+
+        <button onclick="salvarConsulta()">Agendar</button>
+        <button class="secondary" onclick="limparFormConsulta()">Limpar</button>
+        <p id="msgConsulta" class="muted"></p>
+      </div>
+
+      <!-- Listas e financeiro -->
+      <div class="col">
+        <h4>Lista de Pacientes</h4>
+        <table id="tPacientes"><thead><tr><th>Nome</th><th>CPF</th><th>Ações</th></tr></thead><tbody></tbody></table>
+
+        <h4 style="margin-top:12px">Consultas</h4>
+        <table id="tConsultas"><thead><tr><th>Paciente</th><th>Doutor</th><th>Data</th><th>Hora</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody></tbody></table>
+
+        <h4 style="margin-top:12px">Financeiro</h4>
+        <label>Consulta</label>
+        <select id="selConsultaPag"></select>
+        <input id="pagValor" placeholder="Valor pago" type="number" />
+        <select id="pagForma"><option value="avista">À vista</option><option value="parcela">Parcelado</option></select>
+        <button onclick="registrarPagamento()">Registrar pagamento</button>
+        <button class="secondary" onclick="limparPagamento()">Limpar</button>
+        <p id="msgPagamento" class="muted"></p>
+
+        <p class="muted">Receita: R$ <span id="totalReceita">0.00</span></p>
+        <p class="muted">Pendentes: R$ <span id="totalPendentes">0.00</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOUTOR -->
+  <div id="doutorArea" class="card hidden">
+    <h3>Doutor – Consultas e Prontuário</h3>
+    <div class="row">
+      <div class="col">
+        <h4>Minhas Consultas</h4>
+        <table id="tConsultasDoutor"><thead><tr><th>Paciente</th><th>Data</th><th>Hora</th><th>Status</th><th>Ações</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="col">
+        <h4>Informações do Paciente</h4>
+<button onclick="mostrarInfoPaciente()">Mostrar informações</button>
+<div id="infoPaciente" class="muted" style="margin:12px 0"></div>
+
+<h4>Prontuário</h4>
+        <select id="selProntPaciente"></select>
+        <textarea id="prontEvolucao" placeholder="Adicionar evolução"></textarea>
+        <button onclick="adicionarEvolucao()">Salvar evolução</button>
+        <button class="secondary" onclick="limparEvolucao()">Limpar</button>
+        <p id="msgEvolucao" class="muted"></p>
+
+        <h4>Histórico</h4>
+        <div id="histArea" class="muted"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <div id="relatoriosArea" class="card hidden">
+    <h3>Relatórios</h3>
+    <p class="muted">Pacientes: <span id="rTotalPacientes">0</span></p>
+    <p class="muted">Consultas: <span id="rTotalConsultas">0</span></p>
+    <p class="muted">Receita: R$ <span id="rReceita">0.00</span></p>
+  </div>
+
+</div>
+</div>
+<script type="module" src="js/presentation/ui.js"></script>
+</body>
+</html>

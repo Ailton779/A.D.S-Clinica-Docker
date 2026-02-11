@@ -1,0 +1,98 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+  padding: 18px;
+}
+
+.wrap {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  margin-bottom: 14px;
+}
+
+h2, h3, h4 {
+  margin: 6px 0;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #0d6efd;
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #6c757d;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+
+th,
+td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.col {
+  flex: 1;
+}
+
+.hidden {
+  display: none;
+}
+
+.muted {
+  color: #666;
+  font-size: 13px;
+}
+
+.actions button {
+  margin-right: 6px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
