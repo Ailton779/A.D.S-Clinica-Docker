@@ -2,9 +2,9 @@ FROM nginx:alpine
 
 WORKDIR /usr/share/nginx/html
 
-RUN rm -rf ./*
-
-COPY . .
+COPY index.html .
+COPY css ./css
+COPY js ./js
 
 EXPOSE 80
 
