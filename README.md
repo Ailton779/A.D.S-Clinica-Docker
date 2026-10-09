@@ -41,7 +41,7 @@ A.D.S-Clinica/
     └── presentation/
         └── ui.js
 
-Organização em Camada
+Organização em Camadas
 
 Presentation: Responsável pela interface com o usuário.
 
