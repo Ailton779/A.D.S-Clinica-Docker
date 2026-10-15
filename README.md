@@ -1,171 +1,59 @@
-Sistema de Clínica Médica
-1. Visão Geral do Projeto
+# Prática 02 - Observabilidade (Sentry) e ChatOps (GitHub + Discord)
 
-Este projeto consiste em um sistema web para gerenciamento de clínica médica, desenvolvido na disciplina de Arquitetura de Sistemas.
+Disciplina: PWEB-II | Professor: Wesnei de Paiva Batista | Aluno: Ailton
 
-A aplicação foi estruturada seguindo o modelo em camadas (Presentation, Application e Persistence), organizando as responsabilidades do sistema de forma modular.
+## Resumo
 
-Embora o sistema possua separação lógica em camadas, sua execução ocorre inteiramente no lado do cliente (client-side), utilizando armazenamento local para persistência dos dados.
+Nesta atividade integrei o Sentry (monitoramento de erros) e um webhook do GitHub para o Discord (notificações automáticas) no projeto A.D.S-Clinica-Docker, uma aplicação web em HTML, CSS e JavaScript puro servida por Nginx no Docker.
 
-Tecnologias Utilizadas
+- **Sentry:** o SDK é carregado pelo Loader Script e inicializado com `Sentry.init` no arquivo `js/sentry.js`. Um botão na tela inicial (`Gerar erro de teste (Sentry)`) dispara um erro de propósito, e o Sentry captura esse erro com o stack trace.
+- **ChatOps:** o webhook do repositório envia os eventos de Push e Pull Request para um canal do Discord, usando a URL do webhook com `/github` no final.
 
-HTML5
+## Como testar
 
-CSS3
-
-JavaScript
-
-Docker
-
-Nginx
-
-2. Estrutura do Projeto
-
-A estrutura do projeto está organizada da seguinte forma:
-
-A.D.S-Clinica/
-│
-├── Dockerfile
-├── docker-compose.yml
-├── README.md
-├── index.html
-│
-├── Css/
-│   └── style.css
-│
-└── JS/
-    ├── application/
-    │   └── services.js
-    ├── persistence/
-    │   └── repository.js
-    └── presentation/
-        └── ui.js
-
-Organização em Camadas
-
-Presentation: Responsável pela interface com o usuário.
-
-Application: Contém as regras de negócio do sistema.
-
-Persistence: Gerencia o armazenamento dos dados.
-
-Essa separação melhora a organização e facilita manutenção e evolução futura.
-
-3. Containerização com Docker
-
-A aplicação foi containerizada utilizando Docker, permitindo sua execução padronizada em qualquer ambiente.
-
-3.1 Imagem Base
-
-Foi utilizada a imagem:
-
-nginx:alpine
-
-
-Justificativa:
-
-Imagem leve
-
-Ideal para servir aplicações web estáticas
-
-Amplamente utilizada em produção
-
-4. Explicação do Dockerfile
-FROM
-
-Define a imagem base utilizada para criar o container.
-
-FROM nginx:alpine
-
-WORKDIR
-
-Define o diretório de trabalho dentro do container.
-
-WORKDIR /usr/share/nginx/html
-
-RUN
-
-Remove os arquivos padrão do Nginx antes de copiar a aplicação.
-
-RUN rm -rf ./*
-
-COPY
-
-Copia todos os arquivos da aplicação para o diretório do servidor web dentro do container.
-
-COPY . .
-
-EXPOSE
-
-Expõe a porta 80 do container.
-
-EXPOSE 80
-
-CMD
-
-Define o comando que inicia o servidor Nginx quando o container é executado.
-
-CMD ["nginx", "-g", "daemon off;"]
-
-5. Docker Compose
-
-Foi utilizado Docker Compose para simplificar a execução da aplicação.
-
-Serviço configurado
-
-clinica
-
-Constrói a imagem a partir do Dockerfile
-
-Mapeia a porta 8080 da máquina para a porta 80 do container
-
-Arquivo docker-compose.yml:
-
-version: '3.8'
-
-services:
-  clinica:
-    build: .
-    ports:
-      - "8080:80"
-
-6. Execução da Aplicação
-Clonar o repositório
-git clone <link-do-repositorio>
-cd A.D.S-Clinica
-
-Executar com Docker Compose
+```bash
 docker compose up --build
+```
+
+Abrir `http://localhost:8080` e clicar no botão cinza "Gerar erro de teste (Sentry)". O erro aparece na aba Issues do Sentry.
+
+> Observação: bloqueadores de anúncios podem impedir o envio do erro ao Sentry. Testar em aba anônima ou com o bloqueador desativado.
+
+## Print 1 - Código-fonte (Sentry.init e gatilho do erro)
+
+Arquivo `js/sentry.js` com o `Sentry.init` e o código que lança o erro, junto com o botão no `index.html`.
+
+<img width="560" height="372" alt="f9ce0557-ddd5-4fb3-a0a2-023be6868cf5" src="https://github.com/user-attachments/assets/adc665a3-3e82-4adc-8f06-d08f4c8ba0bc" />
+<img width="804" height="505" alt="0c5e7acc-0cc3-4d56-94d4-366a18e1549f" src="https://github.com/user-attachments/assets/57bc9bbd-a93c-4c35-a376-75877a006e32" />
 
 
-A aplicação ficará disponível em:
 
-http://localhost:8080
+## Print 2 - Painel do Sentry (aba Issues)
 
-7. Execução Local vs Execução Containerizada
-Execução Local
+Erro capturado em tempo real, com o stack trace.
 
-A aplicação é aberta diretamente pelo navegador.
+<img width="1600" height="114" alt="14f8dbd1-f929-4fbf-96ef-1aefc450335a" src="https://github.com/user-attachments/assets/36a3b52b-17a5-44a9-b4af-e2c1556c3d8b" />
 
-Depende do ambiente da máquina do usuário.
 
-Execução com Docker
+## Print 3 - Configuração do Webhook no GitHub
 
-A aplicação roda dentro de um container isolado.
+Settings > Webhooks, com a URL do Discord terminando em `/github` (token da URL ocultado por segurança).
 
-Ambiente padronizado.
+<img width="1565" height="361" alt="19705c6c-b1d4-4c3e-a4e5-bdba44f6ede2" src="https://github.com/user-attachments/assets/8a983db8-3e5f-4ff8-96b3-3e11d50825e0" />
 
-Maior portabilidade.
 
-Pode ser executada em qualquer sistema com Docker instalado.
+## Print 4 - Mensagem no canal do Discord
 
-8. Comandos Docker Utilizados
+Mensagem automática postada pelo GitHub no canal após o `git push`.
 
-docker compose up --build
-Constrói a imagem e executa o container.
+<img width="1285" height="315" alt="5668978d-a8c0-43ef-bd9b-9adf08a73fa5" src="https://github.com/user-attachments/assets/0c4c2e0f-36ab-4548-86c5-bf40a5af90c6" />
 
-docker build -t nome-imagem .
-Constrói a imagem manualmente.
 
-docker run -p 8080:80 nome-imagem
-Executa o container manualmente.
+## Extra - Botão de erro na interface
+
+Botão usado para gerar o erro de teste.
+
+<img width="1130" height="308" alt="130f5d36-6cc1-4fe5-a678-9c282e735be9" src="https://github.com/user-attachments/assets/8e87b311-3794-4cbf-809b-c2950ad88ab7" />
+
+
+---
